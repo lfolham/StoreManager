@@ -10,7 +10,7 @@ const getById = async (id) => {
   if (!result) {
     return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
   }
-  return result;
+  return { type: null, message: result };
 };
 
 module.exports = {

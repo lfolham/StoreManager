@@ -6,13 +6,14 @@ const getAll = async (req, res) => {
 };
 
 const getById = async (req, res) => {
-  try {
     const { id } = req.params;
-    const result = await productsService.getById(id);
-    res.status(200).json(result);
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
+    const { type, message } = await productsService.getById(id);
+    
+    if (type) {
+      return res.status(404).json({ message });
+    }
+
+    return res.status(200).json(message);
 };
 
 module.exports = {

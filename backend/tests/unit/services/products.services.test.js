@@ -28,7 +28,7 @@ describe('Test PRODUCTS na camada Service', function () {
     it('ID válido', async function () {
       sinon.stub(productsModel, 'getById').resolves(productsList[0]);
       const result = await productsService.getById(1);
-      expect(result).to.be.deep.equal(productsList[0]);
+      expect(result.message).to.be.deep.equal(productsList[0]);
     });
   });
 });
