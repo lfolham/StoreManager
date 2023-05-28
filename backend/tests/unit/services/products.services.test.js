@@ -8,10 +8,6 @@ const productsModel = require('../../../src/models/productsModel');
 const { productsList } = require('./mock/products.service.mock');
 
 describe('Test PRODUCTS na camada Service', function () {
-  afterEach(function () {
-    sinon.restore();
-  });
-
   it('Teste se getAll retorna todos os produtos', async function () {
     sinon.stub(productsModel, 'getAll').resolves(productsList);
     const result = await productsService.getAll();
