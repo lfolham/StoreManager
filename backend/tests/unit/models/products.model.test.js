@@ -5,7 +5,7 @@ const { expect } = chai;
 
 const connection = require('../../../src/models/connection');
 const productsModel = require('../../../src/models/productsModel');
-const { productsList } = require('./mocks/products.mock');
+const { productsList, creatProduct } = require('./mocks/products.mock');
 
 describe('Test PRODUCTS na camada Model', function () {
   it('Teste se getAll retorna todos os products', async function () {
@@ -22,6 +22,14 @@ describe('Test PRODUCTS na camada Model', function () {
     const result = await productsModel.getById(1);
 
     expect(result).to.be.deep.equal(productsList[0]);
+  });
+
+  it('Teste a CREATE na MODEL', async function () {
+    sinon.stub(connection, 'execute').resolves([[creatProduct]]);
+
+    const result = await productsModel.create({ name: 'ProdutoX' });
+
+    expect(result).to.be.deep.equal(creatProduct);
   });
 
   afterEach(function () {

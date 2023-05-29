@@ -13,13 +13,10 @@ const getById = async (id) => {
 };
 
 const create = async (name) => {
-  await connection
-  .execute('INSERT INTO StoreManager.products (name) VALUE (?)', [name]);
-
-  const [product] = await connection
+  await connection.execute('INSERT INTO StoreManager.products (name) VALUE (?)', [name]);
+  const [result] = await connection
   .execute('SELECT * FROM StoreManager.products WHERE name = ?', [name]);
-
-  return product[0];
+  return result[0];
 };
 
 module.exports = {

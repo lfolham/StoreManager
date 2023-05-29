@@ -5,13 +5,9 @@ const { expect } = chai;
 
 const productsService = require('../../../src/services/productsServices');
 const productsModel = require('../../../src/models/productsModel');
-const { productsList } = require('./mock/products.service.mock');
+const { productsList, creatProduct } = require('./mock/products.service.mock');
 
 describe('Test PRODUCTS na camada Service', function () {
-  afterEach(function () {
-    sinon.restore();
-  });
-
   it('Teste se getAll retorna todos os produtos', async function () {
     sinon.stub(productsModel, 'getAll').resolves(productsList);
 
@@ -36,5 +32,17 @@ describe('Test PRODUCTS na camada Service', function () {
 
       expect(result).to.be.deep.equal({ type: 'PRODUCT_NOT_FOUND', message: 'Product not found' });
     });
+
+    it('Teste se é possível cadastrar novo produto, CREATE', async function () {
+      sinon.stub(productsModel, 'create').resolves(creatProduct);
+
+      const result = await productsService.create({ name: 'ProdutoX' });
+
+      expect(result).to.be.equal({ type: null, message: creatProduct });
+    });
+  });
+
+  afterEach(function () {
+    sinon.restore();
   });
 });
