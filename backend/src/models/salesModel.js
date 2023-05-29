@@ -17,11 +17,8 @@ const getById = async (id) => {
     INNER JOIN sales_products ON sales.id = sale_id AND sale_id = ?
     ORDER BY sales.date, product_id, quantity;
   `, [id]);
-  if (rows.length === 0) {
-    return null;
-  }
-  return rows[0];
-};
+    return rows;
+  };
 
 module.exports = {
   getAll,

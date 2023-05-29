@@ -17,7 +17,7 @@ describe('Test SALES na camada Model', function () {
   });
 
   it('Teste se getById retorna retorna determinado sale', async function () {
-    sinon.stub(connection, 'execute').resolves([[salesProductss[1]]]);
+    sinon.stub(connection, 'execute').resolves([salesProductss[1]]);
 
     const result = await salesModel.getById(1);
 
