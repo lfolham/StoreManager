@@ -16,7 +16,7 @@ describe('Test PRODUCTS na camada Model', function () {
     expect(result).to.be.deep.equal(productsList);
   });
 
-  it('Teste se getById retorna retorna apenas um product', async function () {
+  it('Teste se getById retorna apenas um product', async function () {
     sinon.stub(connection, 'execute').resolves([[productsList[0]]]);
 
     const result = await productsModel.getById(1);

@@ -16,12 +16,12 @@ describe('Test SALES na camada Model', function () {
     expect(result).to.be.deep.equal(salesProductss);
   });
 
-  it('Teste se getById retorna retorna determinado sale', async function () {
-    sinon.stub(connection, 'execute').resolves([salesProductss[1]]);
+  it('Teste se getById retorna apenas um sale', async function () {
+    sinon.stub(connection, 'execute').resolves([salesProductss[0]]);
 
-    const result = await salesModel.getById(1);
+    const result = await salesModel.getById(2);
 
-    expect(result).to.be.deep.equal(salesProductss[1]);
+    expect(result).to.be.deep.equal(salesProductss[0]);
   });
 
   afterEach(function () {

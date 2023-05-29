@@ -17,19 +17,20 @@ describe('Test SALES na camada Service', function () {
   });
 
   describe('Test getById()', function () {
-    it('ID inválido', async function () {
-      sinon.stub(salesModel, 'getById').resolves(null);
-      const result = await salesService.getById(999);
-
-      expect(result).to.be.deep.equal({ type: 404, message: 'Sale not found' });
-    });
-
     it('ID válido', async function () {
-      sinon.stub(salesModel, 'getById').resolves(salesProductss[2]);
-      const result = await salesService.getById(2);
+      sinon.stub(salesModel, 'getById').resolves(salesProductss[0]);
+      const result = await salesService.getById(1);
       
       expect(result.type).to.be.equal(null);
-      expect(result.message).to.be.deep.equal(salesProductss[2]);
+      expect(result.message).to.be.deep.equal(salesProductss[0]);
+    });
+    
+    it('ID inválido, retorna mensagem de erro', async function () {
+      sinon.stub(salesModel, 'getById').resolves([]);
+
+      const result = await salesService.getById(999);
+
+      expect(result).to.be.deep.equal({ type: 'SALE_NOT_FOUND', message: 'Sale not found' });
     });
   });
 
