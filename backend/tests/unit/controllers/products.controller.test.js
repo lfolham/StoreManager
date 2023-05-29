@@ -56,7 +56,7 @@ describe('Test Controller', function () {
 
   describe('Testando o CREATE na CONTROLLER', function () {
     it('Teste se é possivel cadastrar novo produto', async function () {
-      const req = { body: { name: '' } };
+      const req = { body: { name: 'ProdutoX' } };
       const res = {};
 
       res.status = sinon.stub().returns(res);

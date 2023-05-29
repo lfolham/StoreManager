@@ -38,7 +38,8 @@ describe('Test PRODUCTS na camada Service', function () {
 
       const result = await productsService.create({ name: 'ProdutoX' });
 
-      expect(result).to.be.equal({ type: null, message: creatProduct });
+      expect(result.type).to.be.equal(null);
+      expect(result.message).to.deep.equal(creatProduct);
     });
   });
 
