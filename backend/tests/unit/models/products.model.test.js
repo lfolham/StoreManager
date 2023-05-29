@@ -27,7 +27,7 @@ describe('Test PRODUCTS na camada Model', function () {
   it('Teste a CREATE na MODEL', async function () {
     sinon.stub(connection, 'execute').resolves([[creatProduct]]);
 
-    const result = await productsModel.create({ name: 'ProdutoX' });
+    const result = await productsModel.create('ProdutoX');
 
     expect(result).to.be.deep.equal(creatProduct);
   });
