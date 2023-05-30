@@ -8,6 +8,7 @@ const { expect } = chai;
 const productsService = require('../../../src/services/productsServices');
 const productsController = require('../../../src/controllers/productsController');
 const { productsList, createProduct } = require('./mock/products.mock');
+const validateProducts = require('../../../src/middleware/validateProducts');
 
 describe('Test Controller', function () {
   describe('Test PRODUCTS na camada Controller', function () {
@@ -61,14 +62,45 @@ describe('Test Controller', function () {
 
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
+      const next = sinon.stub().returns();
 
       sinon.stub(productsService, 'create')
         .resolves({ type: null, message: createProduct });
 
+      await validateProducts(req, res, next);
       await productsController.create(req, res);
 
       expect(res.status).to.have.been.calledWith(201);
       expect(res.json).to.have.been.calledWith(createProduct);
+      expect(next).to.have.been.calledWith();
+    });
+
+    it('Teste o retorno 400, se o nome não for válido', async function () {
+      const req = { body: { name: '' } };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await validateProducts(req, res);
+
+      expect(res.status).to.have.been.calledWith(400);
+      expect(res.json).to.have.been.calledWith({ message: '"name" is required' });
+    });
+
+    it('Teste o retorno 422, se o nome não for válido', async function () {
+      const req = { body: { name: 'aaaa' } };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await validateProducts(req, res);
+
+      expect(res.status).to.have.been.calledWith(422);
+      expect(res.json).to.have.been.calledWith(
+        { message: '"name" length must be at least 5 characters long' },
+);
     });
   });
 
