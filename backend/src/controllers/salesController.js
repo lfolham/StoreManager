@@ -7,7 +7,7 @@ const getAll = async (_req, res) => {
 
 const getById = async (req, res) => {
   const { id } = req.params;
-    const { type, message } = await salesService.getById(id);
+  const { type, message } = await salesService.getById(id);
     
     if (type) {
       return res.status(404).json({ message });
@@ -16,7 +16,16 @@ const getById = async (req, res) => {
     return res.status(200).json(message);
 };
 
+const create = async (req, res) => {
+  const { type, message } = await salesService.create(req.body);
+
+    if (type) {
+      return res.status(201).json({ message });
+    }
+};
+
 module.exports = {
   getAll,
   getById,
+  create,
 };
