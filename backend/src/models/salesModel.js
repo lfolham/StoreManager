@@ -12,18 +12,36 @@ const getAll = async () => {
 };
 
 const getById = async (id) => {
-  const [result] = await connection
-  .execute(`SELECT salesp.product_id AS productId, 
-    salesp.quantity,s.date    
+  const [result] = await connection.execute(`
+    SELECT salesp.product_id AS productId, 
+    salesp.quantity,
+    s.date    
     FROM sales_products AS salesp 
     INNER JOIN sales AS s 
-    ON s.id = salesp.sale_id WHERE salesp.sale_id = ?
-    ORDER BY salesp.sale_id, salesp.product_id;`, [id]);
+    ON s.id = salesp.sale_id 
+    WHERE salesp.sale_id = ?
+    ORDER BY salesp.sale_id, salesp.product_id;
+  `, [id]);
 
-    return result;
+  return result;
+};
+
+const createSale = async (productList) => {
+  const [result1] = await connection.execute('INSERT INTO StoreManager.sales VALUES ()');
+  const saleId = result1.insertId;
+  const promises = productList.map(({ productId, quantity }) => {
+    const sql = 'INSERT INTO sales_products (sale_id, product_id, quantity) VALUES (?, ?, ?)';
+    const values = [saleId, productId, quantity];
+    return connection.execute(sql, values);
+  });
+  await Promise.all(promises);
+
+  const itemsSold = productList.map(({ productId, quantity }) => ({ productId, quantity }));
+  return { id: saleId, itemsSold };
 };
 
 module.exports = {
   getAll,
   getById,
+  createSale,
 };
