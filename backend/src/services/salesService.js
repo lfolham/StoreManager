@@ -13,16 +13,15 @@ const getById = async (id) => {
   return { type: null, message: result };
 };
 
-const createSale = async (array) => {
-  const saleProducts = await salesModel.createSale(array);
-  if (!saleProducts) {
-    return { type: 404, message: 'Sale not found' };
-  }
-  return { type: null, message: saleProducts };
+const createNewSale = async (productList) => {
+  const saleId = await salesModel.createSale();
+  await salesModel.addItemsToSale(saleId, productList);
+  const itemsSold = productList.map(({ productId, quantity }) => ({ productId, quantity }));
+  return { id: saleId, itemsSold };
 };
 
 module.exports = {
   getAll,
   getById,
-  createSale,
+  createNewSale,
 };

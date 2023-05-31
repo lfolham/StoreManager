@@ -26,22 +26,24 @@ const getById = async (id) => {
   return result;
 };
 
-const createSale = async (productList) => {
-  const [result1] = await connection.execute('INSERT INTO StoreManager.sales VALUES ()');
-  const saleId = result1.insertId;
+const addItemsToSale = async (saleId, productList) => {
   const promises = productList.map(({ productId, quantity }) => {
     const sql = 'INSERT INTO sales_products (sale_id, product_id, quantity) VALUES (?, ?, ?)';
     const values = [saleId, productId, quantity];
     return connection.execute(sql, values);
   });
   await Promise.all(promises);
+};
 
-  const itemsSold = productList.map(({ productId, quantity }) => ({ productId, quantity }));
-  return { id: saleId, itemsSold };
+const createSale = async () => {
+  const [result] = await connection.execute('INSERT INTO StoreManager.sales () VALUES ();');
+  const saleId = result.insertId;
+  return saleId;
 };
 
 module.exports = {
   getAll,
   getById,
+  addItemsToSale,
   createSale,
 };

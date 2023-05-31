@@ -24,7 +24,7 @@ describe('Test Controller', function () {
     });
   });
 
-  describe('Test SALES retornando status 404 e 200', function () {
+  describe('Test SALES ', function () {
     it('Teste o retorno 200', async function () {
       const req = { params: { id: 1 } };
       const res = {};

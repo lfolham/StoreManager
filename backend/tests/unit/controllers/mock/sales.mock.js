@@ -30,7 +30,8 @@ const salesPost = [
   },
 ];
 
-module.exports = { 
+module.exports = {
   salesProductss,
   salesPost,
- };
+
+};
