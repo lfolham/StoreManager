@@ -2,7 +2,7 @@ const { Router } = require('express');
 const salesController = require('../controllers/salesController');
 const validateProductId = require('../middleware/validateProductId');
 const validateQuantity = require('../middleware/validateQuantity');
-// const validateQuantitySales = require('../middleware/validateQuantitySales');
+const validateQuantitySales = require('../middleware/validateQuantitySales');
 
 const productsRouter = Router();
 
@@ -13,7 +13,13 @@ productsRouter.post(
 '/', 
 validateProductId,
 validateQuantity,
-// validateQuantitySales,
+
+salesController.createSales,
+);
+
+productsRouter.put(
+'/', 
+validateQuantitySales,
 salesController.createSales,
 );
 

@@ -8,7 +8,7 @@ const { expect } = chai;
 const productsService = require('../../../src/services/productsServices');
 const productsController = require('../../../src/controllers/productsController');
 const { productsList, createProduct } = require('./mock/products.mock');
-const validateProducts = require('../../../src/middleware/validateProducts');
+const validateName = require('../../../src/middleware/validateName');
 
 describe('Test Controller', function () {
   describe('Test PRODUCTS na camada Controller', function () {
@@ -67,7 +67,7 @@ describe('Test Controller', function () {
       sinon.stub(productsService, 'create')
         .resolves({ type: null, message: createProduct });
 
-      await validateProducts(req, res, next);
+      await validateName(req, res, next);
       await productsController.create(req, res);
 
       expect(res.status).to.have.been.calledWith(201);
@@ -82,7 +82,7 @@ describe('Test Controller', function () {
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
 
-      await validateProducts(req, res);
+      await validateName(req, res);
 
       expect(res.status).to.have.been.calledWith(400);
       expect(res.json).to.have.been.calledWith({ message: '"name" is required' });
@@ -95,7 +95,7 @@ describe('Test Controller', function () {
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
 
-      await validateProducts(req, res);
+      await validateName(req, res);
 
       expect(res.status).to.have.been.calledWith(422);
       expect(res.json).to.have.been.calledWith(
