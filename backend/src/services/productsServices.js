@@ -19,14 +19,22 @@ const create = async (name) => {
 };
 
 const updateProduct = async (id, name) => {
-  console.log('update -require', id, name);
   const result = await productsModel.getById(id);
   if (!result) {
     return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
   }
   const resultUpdate = await productsModel.updateProduct(id, name);
-  console.log('update', resultUpdate);
   return { type: null, message: resultUpdate };
+};
+
+const deleteProduct = async (id) => {
+  const result = await productsModel.getById(id);
+  if (!result) {
+    return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
+  }
+
+  await productsModel.deleteProduct(id);
+  return { type: null };
 };
 
 module.exports = {
@@ -34,4 +42,5 @@ module.exports = {
   getById,
   create,
   updateProduct,
+  deleteProduct,
 };

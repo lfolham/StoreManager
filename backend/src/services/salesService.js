@@ -14,6 +14,7 @@ const getById = async (id) => {
   return { type: null, message: result };
 };
 
+// refatoração de acordo com a mentoria da Mari - valeu Mari!!
 const createSale = async (arraySales) => {
   const productsById = await arraySales.map((sale) => productsModel.getById(sale.productId));
   const promisesProducts = await Promise.all(productsById);

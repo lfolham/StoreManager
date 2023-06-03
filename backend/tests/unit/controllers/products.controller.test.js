@@ -7,10 +7,12 @@ const { expect } = chai;
 
 const productsService = require('../../../src/services/productsServices');
 const productsController = require('../../../src/controllers/productsController');
-const { productsList, createProduct } = require('./mock/products.mock');
+const { productsList, createProduct, updateProduct } = require('./mock/products.mock');
 const validateName = require('../../../src/middleware/validateName');
 
 describe('Test Controller', function () {
+  const productNotFound = 'Product not found';
+
   describe('Test PRODUCTS na camada Controller', function () {
     it('Teste se getAll retorna todos os products', async function () {
       const req = {};
@@ -47,11 +49,11 @@ describe('Test Controller', function () {
       res.json = sinon.stub().returns();
 
       sinon.stub(productsService, 'getById')
-      .resolves({ type: 'PRODUCT_NOT_FOUND', message: 'Product not found' });
+        .resolves({ type: 'PRODUCT_NOT_FOUND', message: productNotFound });
 
       await productsController.getById(req, res);
       expect(res.status).to.have.been.calledWith(404);
-      expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
+      expect(res.json).to.have.been.calledWith({ message: productNotFound });
     });
   });
 
@@ -101,6 +103,74 @@ describe('Test Controller', function () {
       expect(res.json).to.have.been.calledWith(
         { message: '"name" length must be at least 5 characters long' },
 );
+    });
+
+    it('Teste se o update está atualizando corretamente', async function () {
+      const req = { params: { id: 1 }, body: { name: 'Martelo do Batman' } };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      const next = sinon.stub().returns();
+
+      sinon.stub(productsService, 'updateProduct')
+        .resolves({ type: null, message: updateProduct });
+
+      await validateName(req, res, next);
+      await productsController.updateProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(updateProduct);
+      expect(next).to.have.been.calledWith();
+    });
+
+    it('Id de um produto inexistente, o resultado retornado deverá ser', async function () {
+      const req = { params: { id: 1111 }, body: { name: 'Martelo do Batman' } };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      const next = sinon.stub().returns();
+
+      sinon.stub(productsService, 'updateProduct')
+      .resolves({ type: 'PRODUCT_NOT_FOUND', message: productNotFound });
+
+      await validateName(req, res, next);
+      await productsController.updateProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: productNotFound });
+    });
+
+    it('Teste se o delete está funcionando corretamente', async function () {
+      const req = { params: { id: 1 } };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productsService, 'deleteProduct')
+        .resolves({ type: null });
+
+      await productsController.deleteProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(204);
+    });
+
+    it('Será validado que não é possível deletar um produto que não existe', async function () {
+      const req = { params: { id: 1111 } };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productsService, 'deleteProduct')
+        .resolves({ type: 'PRODUCT_NOT_FOUND', message: productNotFound });
+
+      await productsController.deleteProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: productNotFound });
     });
   });
 
