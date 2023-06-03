@@ -4,12 +4,11 @@ const sinonChai = require('sinon-chai');
 
 const { expect } = chai;
 chai.use(sinonChai);
-const { createSales } = require('../../../src/controllers/salesController');
+// const { createSales } = require('../../../src/controllers/salesController');
 
 const validateQuantity = require('../../../src/middleware/validateQuantity');
 
 describe('Teste middleware validateQuantity', function () {
-
   it('middleware passou', async function () {
     const res = {};
     const req = {

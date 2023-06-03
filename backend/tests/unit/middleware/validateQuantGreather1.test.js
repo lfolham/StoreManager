@@ -8,7 +8,6 @@ chai.use(sinonChai);
 const validateQuantGreather1 = require('../../../src/middleware/validateQuantGreather1');
 
 describe('Teste middleware validateQuantity', function () {
-
   it('middleware passou', async function () {
     const res = {};
     const req = {
