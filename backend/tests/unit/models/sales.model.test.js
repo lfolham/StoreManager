@@ -24,7 +24,7 @@ describe('Test SALES na camada Model', function () {
     expect(result).to.be.deep.equal(salesProductss[0]);
   });
 
-  it('Teste se o createSale retorna corretamente', async function () {
+  it('Teste se o createSaleId retorna corretamente', async function () {
     sinon.stub(connection, 'execute').resolves([{
       fieldCount: 0,
       affectedRows: 1,
@@ -34,7 +34,7 @@ describe('Test SALES na camada Model', function () {
       warningStatus: 0,
     }]);
 
-    const result = await salesModel.createSale();
+    const result = await salesModel.createSaleId();
 
     expect(result).to.be.deep.equal(1);
   });

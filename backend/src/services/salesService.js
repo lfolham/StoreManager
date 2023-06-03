@@ -15,13 +15,13 @@ const getById = async (id) => {
 };
 
 const createSale = async (arraySales) => {
-  const productNotFound = await arraySales.map((sale) => !productsModel
-  .getById(sale.productId));
-  console.log(productNotFound);
+  const productsById = await arraySales.map((sale) => productsModel.getById(sale.productId));
+  const promisesProducts = await Promise.all(productsById);
+  const productNotFound = promisesProducts.some((products) => products === undefined);
   if (productNotFound) {
     return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
   }
- 
+
   const saleId = await salesModel.createSaleId();
   const promises = await arraySales.map((sale) => salesModel.addItemsToSale(saleId, sale));
   const itemsSold = await Promise.all(promises);
