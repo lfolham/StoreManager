@@ -5,6 +5,5 @@ module.exports = (req, res, next) => {
     return res.status(400).json({ message: '\'quantity\' is required' });
   }
 
-  console.log('mid validateMissingQuantity passed');
   next();
 };

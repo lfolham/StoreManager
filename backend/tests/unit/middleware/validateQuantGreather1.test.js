@@ -5,19 +5,18 @@ const sinonChai = require('sinon-chai');
 const { expect } = chai;
 chai.use(sinonChai);
 
-const validateProductId = require('../../../src/middleware/validateProductId');
+const validateQuantGreather1 = require('../../../src/middleware/validateQuantGreather1');
 
-describe('Teste Middleware ProductId', function () {
-  it('Não valida sem o campo productId', async function () {
+describe('Teste middleware validateQuantity', function () {
+  it('Se nao tiver quantity, retorna erro', async function () {
     const res = {};
     const req = {
       body: [
         {
-          quantity: 1,
+          productId: 2,
         },
         {
           productId: 2,
-          quantity: 5,
         },
       ],
     };
@@ -25,10 +24,11 @@ describe('Teste Middleware ProductId', function () {
     res.status = sinon.stub().returns(res);
     res.json = sinon.stub().returns();
 
-    await validateProductId(req, res);
+    await validateQuantGreather1(req, res);
 
-    expect(res.status).to.have.been.calledWith(400);
-    expect(res.json).to.have.been.calledWith({ message: '"productId" is required' });
+    expect(res.status).to.have.been.calledWith(422);
+    expect(res.json).to.have.been
+    .calledWith({ message: '"quantity" must be greater than or equal to 1' });
   });
 
   it('middleware passou', async function () {
@@ -47,7 +47,7 @@ describe('Teste Middleware ProductId', function () {
     };
 
     const next = sinon.stub().returns();
-    await validateProductId(req, res, next);
+    await validateQuantGreather1(req, res, next);
     expect(next).to.have.been.calledWith();
   });
 

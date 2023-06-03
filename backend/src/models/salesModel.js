@@ -26,24 +26,26 @@ const getById = async (id) => {
   return result;
 };
 
-const addItemsToSale = async (saleId, productList) => {
-  const promises = productList.map(({ productId, quantity }) => {
-    const sql = 'INSERT INTO sales_products (sale_id, product_id, quantity) VALUES (?, ?, ?)';
-    const values = [saleId, productId, quantity];
-    return connection.execute(sql, values);
-  });
-  await Promise.all(promises);
+const addItemsToSale = async (saleId, objSales) => {
+  const sql = 'INSERT INTO sales_products (sale_id, product_id, quantity) VALUES (?, ?, ?)';
+  const values = [saleId, objSales.productId, objSales.quantity];
+  await connection.execute(sql, values);
+
+  const sqlSearch = 'SELECT product_id AS productId, quantity FROM sales_products WHERE sale_id = ?';
+  const valuesSearch = [saleId];
+  const [result] = await connection.execute(sqlSearch, valuesSearch);
+
+  return result;
 };
 
-const createSale = async () => {
-  const [result] = await connection.execute('INSERT INTO StoreManager.sales () VALUES ();');
-  const saleId = result.insertId;
-  return saleId;
+const createSaleId = async () => {
+  const [{insertId}] = await connection.execute('INSERT INTO StoreManager.sales () VALUES ();');
+  return insertId;
 };
 
 module.exports = {
   getAll,
   getById,
   addItemsToSale,
-  createSale,
+  createSaleId,
 };

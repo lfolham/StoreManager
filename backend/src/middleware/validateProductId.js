@@ -4,6 +4,6 @@ module.exports = (req, res, next) => {
   if (data.some((item) => !item.productId)) {
     return res.status(400).json({ message: '"productId" is required' });
   }
-  console.log('mid validateMissingProductId passed');
+
   next();
 };
