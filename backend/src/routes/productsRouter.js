@@ -12,4 +12,10 @@ validateName,
 productsController.create,
 );
 
+productsRouter.put(
+'/:id', 
+validateName,
+productsController.updateProduct,
+);
+
 module.exports = productsRouter;
